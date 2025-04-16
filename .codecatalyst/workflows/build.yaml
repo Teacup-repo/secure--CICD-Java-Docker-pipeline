@@ -14,20 +14,19 @@ Actions:
         - WorkflowSource
     Compute:
       Type: EC2
+    Environment:
+      Image: amazonlinux:2
     Configuration:
-      Steps:
-        - Run: |
-            bash -c " \
-              echo '🔧 Step 1: Installing Java'; \
-              sudo yum update -y; \
-              sudo yum install -y java-17-openjdk-devel git wget unzip; \
-              echo '📁 Step 2: Navigating to actual source folder'; \
-              cd /codebuild/output/src*/src/WorkflowSource || { echo '❌ Failed to find repo folder'; exit 1; }; \
-              echo '🧭 Confirmed directory:'; pwd; \
-              echo '📂 Files in directory:'; find . -type f; \
-              echo '🛠️ Compiling Java'; \
-              javac -cp 'lib/*' TodoList.java todolist17Test.java || { echo '❌ Compilation failed'; exit 1; }; \
-              echo '🚀 Running tests'; \
-              java -jar lib/junit-platform-console-standalone-1.10.0.jar -cp . --scan-classpath || { echo '❌ Tests failed'; exit 1; }; \
-              echo '✅ Done!'; \
-            "
+      Shell: bash
+    Steps:
+      - Run: |
+          bash -c " \
+            echo '🔧 Step 1: Installing Java'; \
+            sudo yum update -y; \
+            sudo yum install -y java-17-openjdk-devel git wget unzip; \
+            echo '📁 Step 2: Navigating to workspace'; \
+            cd \$AWS_WORKSPACE_PATH || { echo '❌ Workspace not found'; exit 1; }; \
+            echo '📦 Current files:'; \
+            ls -l; \
+            echo '🛠️ Compiling Java'; \
+            javac -cp 'lib
