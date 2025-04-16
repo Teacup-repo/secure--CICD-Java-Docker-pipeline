@@ -1,4 +1,4 @@
-Name: JavaJUnitNoMaven
+Name: JavaJunitNoMaven
 SchemaVersion: "1.0"
 
 Triggers:
@@ -14,6 +14,8 @@ Actions:
         - WorkflowSource
     Compute:
       Type: EC2
+      Environment:
+        Image: amazonlinux:2
     Configuration:
       Steps:
         - Run: |
@@ -22,7 +24,7 @@ Actions:
             sudo yum install -y java-17-openjdk-devel git wget unzip
 
             echo "📁 Step 2: Navigating to source folder"
-            cd $AWS_WORKSPACE_PATH || { echo '❌ Workspace not found'; exit 1; }
+            cd $AWS_WORKSPACE_PATH/secure--CICD-Java-Docker-pipeline || { echo '❌ Repo folder not found'; exit 1; }
 
             echo "📦 Files:"
             ls -l
