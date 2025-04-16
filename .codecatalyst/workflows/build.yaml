@@ -18,4 +18,3 @@ Steps:
         -cp . --scan-classpath || { echo '❌ Tests failed'; exit 1; }
 
       echo "✅ Workflow completed successfully"
-
