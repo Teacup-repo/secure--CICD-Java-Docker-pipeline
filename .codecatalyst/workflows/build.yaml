@@ -21,16 +21,17 @@ Actions:
             sudo yum update -y
             sudo yum install -y java-17-openjdk-devel git wget unzip
 
-            echo "📁 Navigating to repo folder"
-            cd $AWS_WORKSPACE_PATH/secure--CICD-Java-Docker-pipeline || { echo '❌ Repo folder not found'; exit 1; }
+            echo "📁 Navigating to workspace"
+            cd $AWS_WORKSPACE_PATH || { echo '❌ Workspace path not found'; exit 1; }
 
-            echo "📂 Listing repo contents"
+            echo "📂 Listing workspace contents"
             ls -l
+            ls -l lib || echo "⚠️ lib folder not found"
 
-            echo "🛠️ Compiling Java"
+            echo "🛠️ Compiling Java files"
             javac -cp "lib/*" TodoList.java todolist17Test.java || { echo '❌ Compilation failed'; exit 1; }
 
-            echo "🚀 Running JUnit Tests"
+            echo "🚀 Running JUnit tests"
             java -jar lib/junit-platform-console-standalone-1.10.0.jar --class-path . --scan-classpath || { echo '❌ Tests failed'; exit 1; }
 
             echo "✅ Build and test completed successfully!"
