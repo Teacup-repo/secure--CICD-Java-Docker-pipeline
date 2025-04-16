@@ -1,0 +1,32 @@
+Name: JavaJUnitNoMaven
+SchemaVersion: "1.0"
+
+Triggers:
+  - Type: PUSH
+    Branches:
+      - main
+
+Actions:
+  BuildAndTest:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+    Compute:
+      Type: EC2
+    Configuration:
+      Steps:
+        - Run: |
+            echo "🔧 Updating system and installing Java"
+            sudo yum update -y
+            sudo yum install -y java-17-openjdk-devel git wget unzip
+
+            echo "📁 Moving to source directory"
+            cd $AWS_WORKSPACE_PATH
+
+            echo "🛠️ Compiling Java code"
+            javac -cp "lib/*" TodoList.java todolist17Test.java
+
+            echo "🚀 Running JUnit tests"
+            java -jar lib/junit-platform-console-standalone-1.10.0.jar \
+              -cp . --scan-classpath
