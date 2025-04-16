@@ -22,7 +22,7 @@ Actions:
             sudo yum install -y java-17-openjdk-devel git wget unzip
 
             echo "📁 Navigating to workspace"
-            cd $AWS_WORKSPACE_PATH || { echo '❌ Workspace path not found'; exit 1; }
+            cd $AWS_WORKSPACE_PATH
 
             echo "📂 Listing workspace contents"
             ls -l
