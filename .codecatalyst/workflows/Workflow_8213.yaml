@@ -19,21 +19,20 @@ Actions:
         - Run: |
             echo "🔧 Step 1: Installing dependencies"
             sudo yum update -y
-            sudo yum install -y java-17-openjdk-devel git wget unzip
+            sudo yum install -y java-17-openjdk-devel git wget unzip docker
 
-            echo "📁 Step 2: Cloning GitHub repo manually"
-            cd /tmp
-            git clone https://github.com/Teacup-repo/secure--CICD-Java-Docker-pipeline.git
-            cd secure--CICD-Java-Docker-pipeline || { echo '❌ Repo folder not found'; exit 1; }
+            echo "📦 Installing kubectl"
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            chmod +x kubectl
+            sudo mv kubectl /usr/local/bin/
 
-            echo "📦 Step 3: Checking folder structure"
-            ls -l
-            ls -l lib || echo "⚠️ lib folder not found"
+            echo "📁 Writing kubeconfig to file"
+            echo "$KUBECONFIG_CONTENT" > kubeconfig.yaml
+            export KUBECONFIG=$(pwd)/kubeconfig.yaml
 
-            echo "🛠️ Step 4: Compiling Java"
-            javac -cp "lib/*" TodoList.java todolist17Test.java || { echo "❌ Compilation failed"; exit 1; }
+            echo "🚀 Testing cluster access"
+            kubectl get nodes || { echo "❌ Kubernetes unreachable"; exit 1; }
 
-            echo "🚀 Step 5: Running tests"
-            java -jar lib/junit-platform-console-standalone-1.10.0.jar -cp . --scan-classpath || { echo "❌ Tests failed"; exit 1; }
-
-            echo "✅ Done!"
+            echo "✅ K8s setup verified"
+            env:
+            KUBECONFIG_CONTENT: "{{ secrets.KUBECONFIG_CONTENT }}"
