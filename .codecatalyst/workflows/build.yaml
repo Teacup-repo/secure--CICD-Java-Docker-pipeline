@@ -21,12 +21,10 @@ Actions:
               echo '🔧 Step 1: Installing Java'; \
               sudo yum update -y; \
               sudo yum install -y java-17-openjdk-devel git wget unzip; \
-              echo '📁 Step 2: Navigating to workspace'; \
-              cd \$AWS_WORKSPACE_PATH; \
-              echo '🕒 Waiting for source files...'; \
-              sleep 2; \
-              echo '📦 Files in workspace:'; \
-              find . -type f; \
+              echo '📁 Step 2: Navigating to actual source folder'; \
+              cd /codebuild/output/src*/src/WorkflowSource || { echo '❌ Failed to find repo folder'; exit 1; }; \
+              echo '🧭 Confirmed directory:'; pwd; \
+              echo '📂 Files in directory:'; find . -type f; \
               echo '🛠️ Compiling Java'; \
               javac -cp 'lib/*' TodoList.java todolist17Test.java || { echo '❌ Compilation failed'; exit 1; }; \
               echo '🚀 Running tests'; \
