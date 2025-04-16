@@ -17,20 +17,20 @@ Actions:
     Configuration:
       Steps:
         - Run: |
-            echo "🕵️ Step 1: Investigating File System"
-            echo "💡 \$AWS_WORKSPACE_PATH = $AWS_WORKSPACE_PATH"
+            echo "🔧 Installing Java and tools"
+            sudo yum update -y
+            sudo yum install -y java-17-openjdk-devel git wget unzip
 
-            echo "📁 Listing contents of workspace:"
-            ls -l $AWS_WORKSPACE_PATH || echo "❌ Workspace path is empty"
+            echo "📁 Navigating to repo"
+            cd $AWS_WORKSPACE_PATH
 
-            echo "📂 Finding all .java files in system:"
-            find / -type f -name "*.java" 2>/dev/null
+            echo "📂 Contents:"
+            ls -l
 
-            echo "📂 Finding all lib folders:"
-            find / -type d -name "lib" 2>/dev/null
+            echo "🛠️ Compiling Java files"
+            javac -cp "lib/*" TodoList.java todolist17Test.java || { echo "❌ Compilation failed"; exit 1; }
 
-            echo "📁 Finding all files named junit-platform-console-standalone-1.10.0.jar:"
-            find / -type f -name "junit-platform-console-standalone-1.10.0.jar" 2>/dev/null
+            echo "🚀 Running tests"
+            java -jar lib/junit-platform-console-standalone-1.10.0.jar -cp . --scan-classpath || { echo "❌ Tests failed"; exit 1; }
 
-            echo "📦 Dumping entire folder structure (3 levels deep):"
-            find / -maxdepth 3 -type d 2>/dev/null
+            echo "✅ All steps completed successfully!"
