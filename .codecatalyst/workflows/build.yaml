@@ -14,8 +14,6 @@ Actions:
         - WorkflowSource
     Compute:
       Type: EC2
-      Environment:
-        Image: amazonlinux:2
     Configuration:
       Steps:
         - Run: |
