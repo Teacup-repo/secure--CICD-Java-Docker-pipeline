@@ -16,20 +16,27 @@ Actions:
       Type: EC2
     Configuration:
       Steps:
-        - Run: |
-            echo "🔧 Updating system and installing Java"
+        - Name: Install Java and tools
+          Run: |
             sudo yum update -y
             sudo yum install -y java-17-openjdk-devel git wget unzip
 
-            echo "📁 Checking workspace"
+        - Name: List workspace contents
+          Run: |
             cd $AWS_WORKSPACE_PATH
             ls -l
             ls -l lib
 
-            echo "🛠️ Compiling Java code"
+        - Name: Compile Java files
+          Run: |
+            cd $AWS_WORKSPACE_PATH
             javac -cp "lib/*" TodoList.java todolist17Test.java || { echo '❌ Compilation failed'; exit 1; }
 
-            echo "🚀 Running tests"
-            java -jar lib/junit-platform-console-standalone-1.10.0.jar -cp . --scan-classpath || { echo '❌ Tests failed'; exit 1; }
+        - Name: Run JUnit tests
+          Run: |
+            cd $AWS_WORKSPACE_PATH
+            java -jar lib/junit-platform-console-standalone-1.10.0.jar \
+              -cp . --scan-classpath || { echo '❌ Tests failed'; exit 1; }
 
-            echo "✅ Success!"
+        - Name: Done!
+          Run: echo "✅ CI complete!"
