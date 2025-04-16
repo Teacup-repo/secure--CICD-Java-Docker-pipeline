@@ -1,4 +1,4 @@
-Name: JavaJunitNoMaven
+Name: JavaJUnitNoMaven
 SchemaVersion: "1.0"
 
 Triggers:
@@ -22,16 +22,16 @@ Actions:
             sudo yum install -y java-17-openjdk-devel git wget unzip
 
             echo "📁 Step 2: Navigating to source folder"
-            cd $AWS_WORKSPACE_PATH/secure--CICD-Java-Docker-pipeline || { echo '❌ Repo folder not found'; exit 1; }
+            cd $AWS_WORKSPACE_PATH || { echo '❌ Repo folder not found'; exit 1; }
 
             echo "📦 Files:"
             ls -l
-            ls -l lib || echo '📁 lib folder missing (warning only)'
+            ls -l lib || echo "⚠️ lib folder missing"
 
             echo "🛠️ Compiling Java"
-            javac -cp "lib/*" TodoList.java todolist17Test.java || { echo '❌ Compilation failed'; exit 1; }
+            javac -cp "lib/*" TodoList.java todolist17Test.java || { echo "❌ Compilation failed"; exit 1; }
 
             echo "🚀 Running tests"
-            java -jar lib/junit-platform-console-standalone-1.10.0.jar -cp . --scan-classpath || { echo '❌ Tests failed'; exit 1; }
+            java -jar lib/junit-platform-console-standalone-1.10.0.jar -cp . --scan-classpath || { echo "❌ Tests failed"; exit 1; }
 
             echo "✅ Done!"
