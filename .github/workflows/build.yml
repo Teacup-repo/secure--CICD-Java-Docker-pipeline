@@ -1,0 +1,46 @@
+name: Java CI with JUnit and SonarCloud
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Create output directory
+        run: mkdir -p out
+
+      - name: Compile Java files (with JUnit in classpath)
+        run: javac -d out -cp "lib/*" $(find . -name "*.java")
+
+      - name: Run JUnit tests
+        run: java -cp "out:lib/*" org.junit.platform.console.ConsoleLauncher --select-class todolist17Test
+
+      # **Use SonarCloud GitHub Action**
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=clos-182_CYB535MJP
+            -Dsonar.organization=clos-182
+            -Dsonar.sources=.
+            -Dsonar.java.binaries=out
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
