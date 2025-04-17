@@ -19,7 +19,12 @@ Actions:
         - Run: |
             echo "🔧 Step 1: Installing dependencies"
             sudo yum update -y
-            sudo yum install -y java-17-openjdk-devel git wget unzip docker kubectl
+            sudo yum install -y java-17-openjdk-devel git wget unzip docker
+
+            echo "📦 Installing kubectl"
+            curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.10/2024-03-22/bin/linux/amd64/kubectl
+            chmod +x kubectl
+            sudo mv kubectl /usr/local/bin/
 
             echo "📁 Writing kubeconfig to file"
             echo "{{ secrets.KUBECONFIG_CONTENT }}" > kubeconfig.yaml
