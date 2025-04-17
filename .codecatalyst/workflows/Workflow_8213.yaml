@@ -21,10 +21,22 @@ Actions:
             sudo yum update -y
             sudo yum install -y java-17-openjdk-devel git wget unzip docker
 
-            echo "📦 Installing kubectl"
+            echo "📦 Installing kubectl from AWS"
             curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.27.10/2024-03-22/bin/linux/amd64/kubectl
+
+            echo "🔍 Checking downloaded file"
+            file kubectl || echo "⚠️ 'file' command failed"
+            head -n 1 kubectl
+
+            echo "⚙️ Making kubectl executable"
             chmod +x kubectl
-            sudo mv kubectl /usr/local/bin/
+            sudo mv kubectl /usr/local/bin/kubectl
+
+            echo "📍 Where is kubectl?"
+            which kubectl
+
+            echo "🧪 Verifying kubectl install"
+            kubectl version --client || echo "❌ kubectl failed to install"
 
             echo "📁 Writing kubeconfig to file"
             echo "{{ secrets.KUBECONFIG_CONTENT }}" > kubeconfig.yaml
