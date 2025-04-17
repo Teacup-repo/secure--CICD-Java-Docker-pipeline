@@ -1,4 +1,4 @@
-Name: JavaJUnitNoMaven
+Name: JavaJUnitNoMaven-K8s
 SchemaVersion: "1.0"
 
 Triggers:
@@ -27,8 +27,10 @@ Actions:
             sudo mv kubectl /usr/local/bin/
 
             echo "📁 Writing kubeconfig to file"
-            echo "$KUBECONFIG_CONTENT" > kubeconfig.yaml
+            echo "{{ secrets.KUBECONFIG_CONTENT }}" > kubeconfig.yaml
             export KUBECONFIG=$(pwd)/kubeconfig.yaml
 
             echo "🚀 Testing cluster access"
-            kubectl get nodes || { echo "❌
+            kubectl get nodes || { echo "❌ Cannot connect to K8s cluster"; exit 1; }
+
+            echo "✅ Kubernetes is reachable"
