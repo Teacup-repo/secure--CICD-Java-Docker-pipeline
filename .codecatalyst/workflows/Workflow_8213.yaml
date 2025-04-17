@@ -21,18 +21,4 @@ Actions:
             sudo yum update -y
             sudo yum install -y java-17-openjdk-devel git wget unzip docker
 
-            echo "📦 Installing kubectl"
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            chmod +x kubectl
-            sudo mv kubectl /usr/local/bin/
-
-            echo "📁 Writing kubeconfig to file"
-            echo "$KUBECONFIG_CONTENT" > kubeconfig.yaml
-            export KUBECONFIG=$(pwd)/kubeconfig.yaml
-
-            echo "🚀 Testing cluster access"
-            kubectl get nodes || { echo "❌ Kubernetes unreachable"; exit 1; }
-
-            echo "✅ K8s setup verified"
-            env:
-            KUBECONFIG_CONTENT: "{{ secrets.KUBECONFIG_CONTENT }}"
+            echo "📦 Installing kub
