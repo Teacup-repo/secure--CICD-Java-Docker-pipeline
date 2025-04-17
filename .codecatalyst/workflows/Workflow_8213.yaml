@@ -19,13 +19,7 @@ Actions:
         - Run: |
             echo "🔧 Step 1: Installing dependencies"
             sudo yum update -y
-            sudo yum install -y java-17-openjdk-devel git wget unzip docker
-
-            echo "📦 Installing kubectl"
-            KUBECTL_VERSION=$(curl -s https://dl.k8s.io/release/stable.txt)
-            curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
-            chmod +x kubectl
-            sudo mv kubectl /usr/local/bin/
+            sudo yum install -y java-17-openjdk-devel git wget unzip docker kubectl
 
             echo "📁 Writing kubeconfig to file"
             echo "{{ secrets.KUBECONFIG_CONTENT }}" > kubeconfig.yaml
