@@ -15,7 +15,6 @@ This project demonstrates a **secure CI/CD pipeline** for a Java-based applicati
 
 ---
 
----
 
 ## ⚙️ How It Works
 
